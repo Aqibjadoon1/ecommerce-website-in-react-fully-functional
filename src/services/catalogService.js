@@ -51,12 +51,21 @@ export async function getProducts() {
 
   try {
     const snapshot = await getDocs(query(collection(db, 'products'), orderBy('name')));
-    const products = snapshot.docs.map((productDoc) => ({
+    const firestoreProducts = snapshot.docs.map((productDoc) => ({
       id: productDoc.id,
       ...productDoc.data()
     }));
 
-    return products.length ? products : getFallbackProducts();
+    const merged = getFallbackProducts();
+    if (firestoreProducts.length) {
+      const existingIds = new Set(merged.map((p) => p.id));
+      for (const product of firestoreProducts) {
+        const idx = merged.findIndex((p) => p.id === product.id);
+        if (idx >= 0) merged[idx] = product;
+        else merged.push(product);
+      }
+    }
+    return merged;
   } catch (error) {
     console.warn('Using demo catalog because Firestore products could not be loaded.', error);
     return getFallbackProducts();
@@ -64,19 +73,8 @@ export async function getProducts() {
 }
 
 export async function getProductById(productId) {
-  if (!isFirebaseConfigured || !db) {
-    const local = getFallbackProducts().find((product) => product.id === productId || product.slug === productId);
-    return local || null;
-  }
-
-  try {
-    const productDoc = await getDoc(doc(db, 'products', productId));
-    if (productDoc.exists()) return { id: productDoc.id, ...productDoc.data() };
-  } catch (error) {
-    console.warn('Firestore product lookup failed, using demo catalog.', error);
-  }
-
-  return getFallbackProducts().find((product) => product.id === productId || product.slug === productId);
+  const all = await getProducts();
+  return all.find((product) => product.id === productId || product.slug === productId) || null;
 }
 
 export async function saveProduct(product) {

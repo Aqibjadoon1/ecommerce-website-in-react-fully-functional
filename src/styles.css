@@ -31,6 +31,7 @@ body {
   min-width: 320px;
   background: #f5f5f5;
   color: var(--ink);
+  overflow-x: hidden;
 }
 
 a {
@@ -408,8 +409,8 @@ main {
 
 @media (max-width: 768px) {
   .store-hero {
-    width: 100%;
-    margin-left: 0;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
   }
 }
 
@@ -1795,9 +1796,10 @@ legend {
   }
 
   .store-hero img {
-    height: 220px;
-    object-fit: cover;
     aspect-ratio: auto;
+    object-fit: contain;
+    height: auto;
+    width: 100%;
   }
 
   .product-grid,

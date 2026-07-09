@@ -1,10 +1,11 @@
-import { ArrowLeft, Check, Minus, Plus, ShieldCheck, Star, Truck } from 'lucide-react';
+import { ArrowLeft, Check, Minus, Plus, ShieldCheck, Star, Truck, Phone } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { addToCart } from '../store/cartSlice';
 import { getProductById } from '../services/catalogService';
 import { formatCurrency, getDisplayPrice, getEffectivePrice } from '../utils/format';
+import { brandConfig } from '../config/brand';
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -36,6 +37,15 @@ export default function ProductDetail() {
   const addMany = () => {
     if (!canPurchase) return;
     Array.from({ length: quantity }).forEach(() => dispatch(addToCart(product)));
+  };
+
+  const handleAction = () => {
+    if (canPurchase) {
+      addMany();
+    } else {
+      const phoneNumber = product.priceText?.match(/[\d-]{7,15}/)?.[0]?.replace(/-/g, '') || brandConfig.phone.replace(/[\s-]/g, '');
+      window.location.href = `tel:${phoneNumber}`;
+    }
   };
 
   return (
@@ -81,12 +91,15 @@ export default function ProductDetail() {
           </div>
 
           <div className="detail-actions">
-            <button className="primary-button" onClick={addMany} type="button" disabled={!canPurchase}>
+            <button className="primary-button" onClick={handleAction} type="button">
+              {!canPurchase && <Phone size={18} style={{ marginRight: '8px' }} />}
               {canPurchase ? 'Add to cart' : 'Call for availability'}
             </button>
-            <Link className="secondary-button" to="/checkout" onClick={addMany}>
-              Buy now
-            </Link>
+            {canPurchase && (
+              <Link className="secondary-button" to="/checkout" onClick={addMany}>
+                Buy now
+              </Link>
+            )}
           </div>
 
           <div className="policy-list">

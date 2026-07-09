@@ -1,9 +1,10 @@
-import { Heart, ShoppingCart, Star } from 'lucide-react';
+import { Heart, ShoppingCart, Star, Phone } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { addToCart } from '../store/cartSlice';
 import { formatCurrency, getDisplayPrice, getEffectivePrice } from '../utils/format';
 import { selectIsWishlisted, toggleWishlist } from '../store/wishlistSlice';
+import { brandConfig } from '../config/brand';
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
@@ -11,9 +12,14 @@ export default function ProductCard({ product }) {
   const hasDiscount = product.discountPrice && product.discountPrice < (product.regularPrice || product.price);
   const canPurchase = product.purchasable !== false && product.inStock !== false && getEffectivePrice(product) > 0;
 
-  const addProduct = (event) => {
+  const handleAction = (event) => {
     event.preventDefault();
-    dispatch(addToCart(product));
+    if (canPurchase) {
+      dispatch(addToCart(product));
+    } else {
+      const phoneNumber = product.priceText?.match(/[\d-]{7,15}/)?.[0]?.replace(/-/g, '') || brandConfig.phone.replace(/[\s-]/g, '');
+      window.location.href = `tel:${phoneNumber}`;
+    }
   };
 
   return (
@@ -37,8 +43,8 @@ export default function ProductCard({ product }) {
             <strong>{getDisplayPrice(product)}</strong>
             {hasDiscount && <span>{formatCurrency(product.regularPrice || product.price)}</span>}
           </div>
-          <button className="add-button" onClick={addProduct} type="button" disabled={!canPurchase}>
-            <ShoppingCart size={17} />
+          <button className="add-button" onClick={handleAction} type="button">
+            {canPurchase ? <ShoppingCart size={17} /> : <Phone size={17} />}
             {canPurchase ? 'Add' : 'Call'}
           </button>
         </div>

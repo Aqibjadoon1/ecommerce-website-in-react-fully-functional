@@ -1795,9 +1795,9 @@ legend {
   }
 
   .store-hero img {
+    height: 220px;
+    object-fit: cover;
     aspect-ratio: auto;
-    object-fit: contain;
-    height: auto;
   }
 
   .product-grid,
@@ -1849,21 +1849,25 @@ legend {
   }
 
   .trust-strip > div {
-    padding: 12px;
-    gap: 8px;
+    padding: 10px 8px;
+    gap: 6px;
     flex-direction: column;
     text-align: center;
   }
 
   .trust-strip strong {
-    font-size: 13px;
+    font-size: 11px;
   }
 
   .trust-strip span {
-    font-size: 12px;
+    font-size: 10px;
   }
 
-  .trust-strip,
+  .trust-strip svg {
+    width: 20px;
+    height: 20px;
+  }
+
   .footer-grid,
   .form-grid,
   .stepper {

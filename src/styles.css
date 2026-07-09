@@ -400,10 +400,17 @@ main {
 }
 
 .store-hero img {
+  display: block;
   width: 100%;
   aspect-ratio: 1900 / 700;
   object-fit: cover;
-  display: block;
+}
+
+@media (max-width: 768px) {
+  .store-hero {
+    width: 100%;
+    margin-left: 0;
+  }
 }
 
 /* ===== TRUST STRIP ===== */
@@ -1669,7 +1676,7 @@ legend {
   }
 
   .store-hero {
-    grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .product-grid {
@@ -1697,6 +1704,7 @@ legend {
     padding: 0 14px;
   }
 
+  .catalog-page,
   .cart-page,
   .checkout-page,
   .account-page,
@@ -1705,9 +1713,33 @@ legend {
     grid-template-columns: 1fr;
   }
 
-  .filter-panel,
   .summary-card {
     position: static;
+  }
+
+  .filter-panel {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .filter-title {
+    display: none;
+  }
+
+  .filter-panel label {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .filter-note {
+    display: none;
   }
 
   .cart-line {
@@ -1763,7 +1795,9 @@ legend {
   }
 
   .store-hero img {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: auto;
+    object-fit: contain;
+    height: auto;
   }
 
   .product-grid,
@@ -1829,8 +1863,6 @@ legend {
     font-size: 12px;
   }
 
-  .product-grid,
-  .category-grid,
   .trust-strip,
   .footer-grid,
   .form-grid,
@@ -1885,5 +1917,72 @@ legend {
   .float-btn svg {
     width: 20px;
     height: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-image-wrap {
+    padding: 10px;
+  }
+
+  .wishlist-button {
+    top: 8px;
+    right: 8px;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+  }
+
+  .wishlist-button svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .product-card-body {
+    padding: 12px 10px;
+  }
+
+  .product-card h3 {
+    min-height: 36px;
+    margin: 4px 0 6px;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+
+  .product-category {
+    font-size: 11px;
+  }
+
+  .rating-line {
+    font-size: 12px;
+  }
+
+  .price-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  .price-row > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .price-row strong {
+    font-size: 15px;
+  }
+
+  .price-row span {
+    font-size: 11px;
+  }
+
+  .add-button {
+    width: 100%;
+    justify-content: center;
+    font-size: 12px;
+    min-height: 34px;
+    padding: 0 8px;
   }
 }
